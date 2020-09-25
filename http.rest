@@ -1,0 +1,58 @@
+GET http://localhost:3001/auth/test
+
+###
+
+POST http://localhost:3001/auth/signup
+Content-Type: application/json
+
+{
+    "login": "podpivasnik2281",
+    "password": "sliva",
+    "firstName": "Artem",
+    "lastName": "Mironov"
+}
+
+###
+
+POST http://localhost:3001/auth/signin
+Content-Type: application/json
+
+{
+    "login": "podpivasnik228",
+    "password": "sliva"
+}
+
+###
+
+POST http://localhost:3001/tasks/newTask
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4IiwiZmlyc3ROYW1lIjoiQXJ0ZW0iLCJsYXN0TmFtZSI6Ik1pcm9ub3YiLCJpYXQiOjE2MDA5MzM2OTcsImV4cCI6MTYwMzUyNTY5N30.lqaYFdmAl8sJ0VdwkqNSelzycJwdcbQDQTsFfEyD_SU
+
+{
+    "text": "My second task",
+    "checked": false
+}
+
+###
+
+GET http://localhost:3001/tasks/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4IiwiZmlyc3ROYW1lIjoiQXJ0ZW0iLCJsYXN0TmFtZSI6Ik1pcm9ub3YiLCJpYXQiOjE2MDA5MzM2OTcsImV4cCI6MTYwMzUyNTY5N30.lqaYFdmAl8sJ0VdwkqNSelzycJwdcbQDQTsFfEyD_SU
+
+
+###
+
+DELETE http://localhost:3001/tasks/5f69e1206125ce92e3335ae3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4IiwiZmlyc3ROYW1lIjoiQXJ0ZW0iLCJsYXN0TmFtZSI6Ik1pcm9ub3YiLCJpYXQiOjE2MDA5MzM2OTcsImV4cCI6MTYwMzUyNTY5N30.lqaYFdmAl8sJ0VdwkqNSelzycJwdcbQDQTsFfEyD_SU
+
+###
+
+PATCH http://localhost:3001/tasks/5f69fdf84c18a5af2b81e4a3
+Authorization: 5f68b1d468a7638212b65cef
+
+{
+    "checked": true
+}
+
+###
+
+GET http://localhost:3001/auth/5f68b1d468a7638212b65cef
