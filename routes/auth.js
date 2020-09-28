@@ -8,19 +8,29 @@ const { secretOrKey } =  config;
 const router = Router()
 
 
-router.get('/:id', async (req, res) => {
-    try {
-        const { params: { id } } = req;
+// router.get('/:id', async (req, res) => {
+//     try {
+//         const { params: { id } } = req;
 
-        const currentUser = await User.findOne({_id: id});
-        const { firstName, lastName } = currentUser;
-        const response = {
-            firstName,
-            lastName
-        }
-        res.status(200).send(response);
+//         const currentUser = await User.findOne({_id: id});
+//         const { firstName, lastName } = currentUser;
+//         const response = {
+//             firstName,
+//             lastName
+//         }
+//         res.status(200).send(response);
+//     } catch (err) {
+//         console.log(err.message)
+//         res.status(500).json(err.message)
+//     }
+// })
+
+router.get('/verify', passport.authenticate('jwt', { session:false }), async (req, res) => {
+    try {
+        const { headers: { authorization } } = req;
+        res.status(200).send(authorization);
+        
     } catch (err) {
-        console.log(err.message)
         res.status(500).json(err.message)
     }
 })
