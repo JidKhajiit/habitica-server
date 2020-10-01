@@ -8,17 +8,21 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
+    nickName: {
+        type: String,
+        required: true,
+    },
     password: {
         type: String,
         required: true,
     },
     firstName: {
         type: String,
-        required: true,
+        required: false,
     },
     lastName: {
         type: String,
-        required: true,
+        required: false,
     },
 });
 

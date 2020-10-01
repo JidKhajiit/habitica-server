@@ -6,7 +6,8 @@ POST http://localhost:3001/auth/signup
 Content-Type: application/json
 
 {
-    "login": "podpivasnik2281",
+    "login": "podpivasnik228",
+    "nickName": "podpivasnik228",
     "password": "sliva",
     "firstName": "Artem",
     "lastName": "Mironov"
@@ -24,30 +25,49 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3001/tasks/newTask
+POST http://localhost:3001/groups/new-group
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4IiwiZmlyc3ROYW1lIjoiQXJ0ZW0iLCJsYXN0TmFtZSI6Ik1pcm9ub3YiLCJpYXQiOjE2MDA5MzM2OTcsImV4cCI6MTYwMzUyNTY5N30.lqaYFdmAl8sJ0VdwkqNSelzycJwdcbQDQTsFfEyD_SU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
 
 {
-    "text": "My second task",
-    "checked": false
+    "title": "Shopping list",
+    "description": "",
+    "users": [
+        "5f75d278272f9c5301f394ab"
+    ],
+    "tasks": []
 }
 
 ###
 
-GET http://localhost:3001/tasks/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4IiwiZmlyc3ROYW1lIjoiQXJ0ZW0iLCJsYXN0TmFtZSI6Ik1pcm9ub3YiLCJpYXQiOjE2MDA5MzM2OTcsImV4cCI6MTYwMzUyNTY5N30.lqaYFdmAl8sJ0VdwkqNSelzycJwdcbQDQTsFfEyD_SU
+POST http://localhost:3001/tasks/new-task
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
+
+{
+    "title": "buy some sugar",
+    "description": "there is no sugar in the office",
+    "workers": [{
+        "id": "5f75d278272f9c5301f394ab",
+        "startTime": "19:20"
+    }]
+}
+
+###
+
+GET http://localhost:3001/tasks/user/5f75d278272f9c5301f394ab
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTYwNjUwLCJleHAiOjE2MDQxNTI2NTB9.jp0o2BlWNKn-s9gGyBuos883oxy77zAQSzkH42urP_Y
 
 
 ###
 
 GET http://localhost:3001/auth/verify
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4IiwiZmlyc3ROYW1lIjoiQXJ0ZW0iLCJsYXN0TmFtZSI6Ik1pcm9ub3YiLCJpYXQiOjE2MDA5MzM2OTcsImV4cCI6MTYwMzUyNTY5N30.lqaYFdmAl8sJ0VdwkqNSelzycJwdcbQDQTsFfEyD_SU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
 
 ###
 
 DELETE http://localhost:3001/tasks/5f69e1206125ce92e3335ae3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4IiwiZmlyc3ROYW1lIjoiQXJ0ZW0iLCJsYXN0TmFtZSI6Ik1pcm9ub3YiLCJpYXQiOjE2MDA5MzM2OTcsImV4cCI6MTYwMzUyNTY5N30.lqaYFdmAl8sJ0VdwkqNSelzycJwdcbQDQTsFfEyD_SU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
 
 ###
 

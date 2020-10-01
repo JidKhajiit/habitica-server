@@ -36,7 +36,7 @@ router.get('/verify', passport.authenticate('jwt', { session:false }), async (re
 })
 
 router.post('/signup', async (req, res) => {
-    const { body: { login, password, firstName, lastName } } = req;
+    const { body: { login, nickName, password, firstName, lastName } } = req;
     try {
         const isUserExist = await User.findOne({ login });
 
@@ -44,6 +44,7 @@ router.post('/signup', async (req, res) => {
 
         const user = new User({
             login,
+            nickName,
             password,
             firstName,
             lastName
@@ -52,6 +53,7 @@ router.post('/signup', async (req, res) => {
         user.save();
         const token = `Bearer ${jwt.sign({
             login,
+            nickName,
             firstName,
             lastName
         }, secretOrKey, {expiresIn: 86400 * 30})}`;
@@ -65,7 +67,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/signin', async (req, res) => {
     const { body: { login, password } } = req;
-    // console.log(login, password)
+
     try {
         const isUserExist = await User.findOne({ login });
         // console.log(isUserExist)
@@ -74,9 +76,10 @@ router.post('/signin', async (req, res) => {
         } else if (isUserExist.password !== password) {
             throw new Error("Wrong password. Ur mom will die!!!")
         } else {
-            const { login, firstName, lastName } = isUserExist
+            const { login, nickName, firstName, lastName } = isUserExist
             const token = `Bearer ${jwt.sign({
                 login,
+                nickName,
                 firstName,
                 lastName 
             }, secretOrKey, {expiresIn: 86400 * 30})}`;
