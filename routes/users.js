@@ -9,28 +9,28 @@ import Group from '../schemes/group.js';
 const router = Router()
 
 
-// router.get('/:id', async (req, res) => {
-//     try {
-//         const { params: { id } } = req;
-
-//         const currentTask = await Task.findOne({_id: id});
-//         const { firstName, lastName } = currentUser;
-//         const response = {
-//             firstName,
-//             lastName
-//         }
-//         res.status(200).send(response);
-//     } catch (err) {
-//         console.log(err.message)
-//         res.status(500).json(err.message)
-//     }
-// })
-
-router.get('/user/:id', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const { params: { id } } = req;
-        const currentTasks = await Task.find({ "workers.id": id })
-        res.status(200).send(currentTasks);
+        const users = await User.find().lean()
+        res.status(200).send(currentUsers);
+    } catch (err) {
+        res.status(500).json(err.message)
+    }
+})
+
+router.get('/nicks', async (req, res) => {
+    try {
+        // const { params: { id } } = req;
+        const users = await User.find().lean();
+        const nicks = [];
+        users.forEach((user) => {
+            nicks.push({
+                _id: user._id,
+                nickName: user.nickName
+            })
+        })
+        res.status(200).send(nicks);
     } catch (err) {
         res.status(500).json(err.message)
     }

@@ -6,11 +6,9 @@ POST http://localhost:3001/auth/signup
 Content-Type: application/json
 
 {
-    "login": "podpivasnik228",
-    "nickName": "podpivasnik228",
-    "password": "sliva",
-    "firstName": "Artem",
-    "lastName": "Mironov"
+    "login": "user8",
+    "nickName": "user8",
+    "password": "sliva"
 }
 
 ###
@@ -30,12 +28,17 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
 
 {
-    "title": "Shopping list",
-    "description": "",
+    "title": "Some Project",
+    "description": "Something about this project Something about this project Something about this project Something about this project Something about this project Something about this project",
     "users": [
-        "5f75d278272f9c5301f394ab"
+        "5f75d278272f9c5301f394ab",
+        "5f77151e35357c543c030ee0",
+        "5f77151035357c543c030ede",
+        "5f77154335357c543c030ee5"
     ],
-    "tasks": []
+    "tags": ["#tag1", "tag2"]
+
+    
 }
 
 ###
@@ -45,17 +48,21 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
 
 {
-    "title": "buy some sugar",
+    "title": "buy some sugar!!!",
     "description": "there is no sugar in the office",
     "workers": [{
-        "id": "5f75d278272f9c5301f394ab",
-        "startTime": "19:20"
-    }]
+        "_id": "5f75d278272f9c5301f394ab",
+        "startTime": "12:20"
+    }, {
+        "_id": "5f77154335357c543c030ee5"
+    }],
+    "groupId": "5f77097de66e674a957a16d1",
+    "completed": false
 }
 
 ###
 
-GET http://localhost:3001/tasks/user/5f75d278272f9c5301f394ab
+GET http://localhost:3001/users/nicks
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTYwNjUwLCJleHAiOjE2MDQxNTI2NTB9.jp0o2BlWNKn-s9gGyBuos883oxy77zAQSzkH42urP_Y
 
 

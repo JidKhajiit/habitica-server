@@ -12,7 +12,7 @@ const taskSchema = new Schema({
         required: false,
     },
     workers: [{
-        id: {
+        _id: {
             type: String,
             required: true,
         },
@@ -26,9 +26,17 @@ const taskSchema = new Schema({
         },
         completeTime: {
             type: String,
-            required: false,     
+            required: false,
         }
-    }]
+    }],
+    groupId: {
+        type: String,
+        required: false,
+    },
+    completed: {
+        type: Boolean,
+        required: true
+    }
 });
 
 export default mongoose.model("Task", taskSchema);

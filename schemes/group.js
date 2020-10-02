@@ -15,10 +15,14 @@ const groupSchema = new Schema({
         type: String,
         required: true,
     }],
-    tasks: [{
+    tags: [{
         type: String,
-        required: false,
+        required: false
     }]
+    // tasks: [{
+    //     type: String,
+    //     required: false,
+    // }]
 
 });
 
