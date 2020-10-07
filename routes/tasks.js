@@ -9,22 +9,42 @@ import Group from '../schemes/group.js';
 const router = Router()
 
 
-// router.get('/:id', async (req, res) => {
-//     try {
-//         const { params: { id } } = req;
+router.patch('/check/:id', async (req, res) => {
+    try {
+        const { params: { id: taskId }, body: { completed } } = req;
+        await Task.updateOne({ _id: taskId }, { completed });
 
-//         const currentTask = await Task.findOne({_id: id});
-//         const { firstName, lastName } = currentUser;
-//         const response = {
-//             firstName,
-//             lastName
-//         }
-//         res.status(200).send(response);
-//     } catch (err) {
-//         console.log(err.message)
-//         res.status(500).json(err.message)
-//     }
-// })
+
+        res.status(200).send('edited');
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).json(err.message)
+    }
+})
+
+router.patch('/:id', async (req, res) => {
+    try {
+        const { params: { id: taskId }, body } = req;
+
+        const bodyParams = {
+            title: '',
+            description: '',
+            workers: []
+        }
+        const bodyVerification = {...bodyParams, ...body};
+
+        if(Object.keys(bodyParams).length >= Object.keys(bodyVerification).length) {
+            await Task.updateOne({ _id: taskId }, { ...body });
+        } else {
+            throw new Error("Bad request.");
+        }
+        
+        res.status(200).send('edited');
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).json(err.message)
+    }
+})
 
 router.get('/user/:id', async (req, res) => {
     try {
@@ -37,15 +57,14 @@ router.get('/user/:id', async (req, res) => {
 })
 
 router.post('/new-task', async (req, res) => {
-    const { body: { title, description, workers, groupId, completed } } = req;
+    const { body: { title, description, workers, groupId } } = req;
     try {
         // const isUserExist = await User.findOne({ login });
         // if (isUserExist) throw new Error("User is already exist.");
 
         const newTask = new Task({
-            title, description, workers, groupId, completed
+            title, description, workers, groupId, completed: false
         });
-        console.log(newTask);
         await newTask.save();
         // if (groupId) {
         //     const currentGroup = await Group.findOne({ _id: groupId });
@@ -61,5 +80,24 @@ router.post('/new-task', async (req, res) => {
         res.status(500).json(err.message)
     }
 });
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const { user: { _id: userId }, params: { id: taskId } } = req;
+        const currentTask = await Task.findOne({ _id: taskId });
+        const currentGroup = await Group.findOne({_id: currentTask.groupId});
+
+        if(currentGroup.users.includes(userId)) {
+            await Task.deleteOne({ _id: taskId });
+        } else {
+            throw new Error("This task isn't yours.");
+        }
+        
+        res.status(204).send('deleted');
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).json(err.message)
+    }
+})
 
 export default router

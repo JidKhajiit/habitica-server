@@ -32,9 +32,6 @@ router.get('/', async (req, res) => {
         const userGroupsWithCounter = [];
         for(const group of userGroups){
             const currentTasks = await Task.find({groupId: group._id}).lean()
-            console.log(currentTasks)
-            console.log("all", currentTasks.length)
-            console.log("active", currentTasks.filter((task) => task.completed === false).length)
             group.tasks = {
                 all: currentTasks.length,
                 active: currentTasks.filter((task) => task.completed === false).length
@@ -53,8 +50,37 @@ router.get('/:id', async (req, res) => {
         const { params: { id } } = req;
         const currentGroup = await Group.findOne({ _id: id }).lean();
         currentGroup.tasks = await Task.find({groupId: id});
+        let currentUsers = []; 
+
+        for(const userId of currentGroup.users){
+            const user = await User.findOne({_id: userId});
+            currentUsers.push({
+                _id: user._id,
+                nickName: user.nickName
+            });
+        }
+        currentGroup.users = currentUsers;
         res.status(200).send(currentGroup);
     } catch (err) {
+        res.status(500).json(err.message)
+    }
+})
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const { user: { _id: userId }, params: { id: groupId } } = req;
+        const currentGroup = await Group.findOne({_id: groupId});
+
+        if(currentGroup.users.includes(userId)) {
+            await Group.deleteOne({ _id: groupId });
+            await Task.deleteMany({groupId});
+        } else {
+            throw new Error("This group isn't yours.");
+        }
+        
+        res.status(204).send('deleted');
+    } catch (err) {
+        console.log(err.message)
         res.status(500).json(err.message)
     }
 })
@@ -90,6 +116,31 @@ router.post('/new-group', async (req, res) => {
         res.status(500).json(err.message)
     }
 });
+
+router.patch('/:id', async (req, res) => {
+    try {
+        const { params: { id: groupId }, body } = req;
+
+        const bodyParams = {
+            title: '',
+            tags: [],
+            description: '',
+            users: []
+        }
+        const bodyVerification = {...bodyParams, ...body};
+
+        if(Object.keys(bodyParams).length >= Object.keys(bodyVerification).length) {
+            await Group.updateOne({ _id: groupId }, { ...body });
+        } else {
+            throw new Error("Bad request.");
+        }
+        
+        res.status(200).send('edited');
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).json(err.message)
+    }
+})
 
 
 export default router

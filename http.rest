@@ -62,7 +62,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpd
 
 ###
 
-GET http://localhost:3001/users/nicks
+GET http://localhost:3001/groups/5f77097de66e674a957a16d1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTYwNjUwLCJleHAiOjE2MDQxNTI2NTB9.jp0o2BlWNKn-s9gGyBuos883oxy77zAQSzkH42urP_Y
 
 
@@ -73,16 +73,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpd
 
 ###
 
-DELETE http://localhost:3001/tasks/5f69e1206125ce92e3335ae3
+DELETE http://localhost:3001/tasks/5f7aec35e92042141c08ab9c
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
 
 ###
 
-PATCH http://localhost:3001/tasks/5f69fdf84c18a5af2b81e4a3
-Authorization: 5f68b1d468a7638212b65cef
+PATCH http://localhost:3001/tasks/5f7adc68e92042141c08ab9a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
 
 {
-    "checked": true
+    "description": "Today!!"
 }
 
 ###
