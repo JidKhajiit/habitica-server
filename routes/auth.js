@@ -44,7 +44,7 @@ router.post('/signup', async (req, res) => {
 
         const user = new User({
             login,
-            nickName,
+            nickName: login,
             password,
             firstName,
             lastName
