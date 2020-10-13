@@ -11,6 +11,7 @@ const userSchema = new Schema({
     nickName: {
         type: String,
         required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -24,6 +25,9 @@ const userSchema = new Schema({
         type: String,
         required: false,
     },
+    friends: [{
+        type: String
+    }]
 });
 
 export default mongoose.model("User", userSchema);

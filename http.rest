@@ -6,8 +6,8 @@ POST http://localhost:3001/auth/signup
 Content-Type: application/json
 
 {
-    "login": "user8",
-    "nickName": "user8",
+    "login": "user9",
+    "nickName": "user9",
     "password": "sliva"
 }
 

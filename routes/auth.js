@@ -52,10 +52,8 @@ router.post('/signup', async (req, res) => {
         console.log(user);
         user.save();
         const token = `Bearer ${jwt.sign({
-            login,
-            nickName,
-            firstName,
-            lastName
+            _id: user._id,
+            nickName
         }, secretOrKey, {expiresIn: 86400 * 30})}`;
         res.status(201).send(token);
     } catch (err) {
@@ -76,12 +74,10 @@ router.post('/signin', async (req, res) => {
         } else if (isUserExist.password !== password) {
             throw new Error("Wrong password. Ur mom will die!!!")
         } else {
-            const { login, nickName, firstName, lastName } = isUserExist
+            const { _id, nickName, firstName, lastName } = isUserExist
             const token = `Bearer ${jwt.sign({
-                login,
-                nickName,
-                firstName,
-                lastName 
+                _id,
+                nickName
             }, secretOrKey, {expiresIn: 86400 * 30})}`;
             res.status(200).send(token)
         }
