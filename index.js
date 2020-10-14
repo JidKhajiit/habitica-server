@@ -8,6 +8,7 @@ import authRouter from "./routes/auth.js";
 import tasksRouter from "./routes/tasks.js";
 import groupsRouter from './routes/groups.js';
 import usersRouter from './routes/users.js';
+import friendReqRouter from './routes/friendReqs.js';
 import mongoose from './lib/mongoose.js'; //так нада.
 import cors from 'cors';
 import runPassport from './middleware/passport.js';
@@ -29,7 +30,7 @@ app.use('/auth', authRouter);
 app.use('/tasks', passport.authenticate('jwt', { session:false }), tasksRouter);
 app.use('/groups', passport.authenticate('jwt', { session:false }), groupsRouter);
 app.use('/users', passport.authenticate('jwt', { session:false }), usersRouter);
-
+app.use('/friend-req', passport.authenticate('jwt', { session:false }), friendReqRouter);
 
 app.listen(port, (error) => {
     if (error) return console.log(`Error: ${error}`);

@@ -23,6 +23,17 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:3001/friend-req/add/5f77151035357c543c030ede
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjc1ZDI3ODI3MmY5YzUzMDFmMzk0YWIiLCJuaWNrTmFtZSI6InBvZHBpdmFzbmlrMjI4IiwiaWF0IjoxNjAyNjc4MTUwLCJleHAiOjE2MDUyNzAxNTB9.n47LU9rO1sTh-XLW__kvxxaIKxyuu6l8UUB7xJfHIuc
+
+# {
+#     "login": "podpivasnik228",
+#     "password": "sliva"
+# }
+
+###
+
 POST http://localhost:3001/groups/new-group
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
