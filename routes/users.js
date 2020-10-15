@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../schemes/user.js';
 import Task from '../schemes/task.js';
 import Group from '../schemes/group.js';
-import friendReq from '../schemes/friendReq.js';
+import FriendReq from '../schemes/friendReq.js';
 // import config from '../config/constants.js'
 
 // const { secretOrKey } =  config;
@@ -59,27 +59,32 @@ router.get('/nicks/add-friend/:part', async (req, res) => {
 
         const { params: { part }, user: { _id: myUserId } } = req;
         const currentUsers = await User.find({ nickName: new RegExp(part) }).lean();
-        const existedReqs = await friendReq.find({ out: myUserId })
+        const existedOutgoingReqs = await FriendReq.find({ out: myUserId });
+        const existedIncomingReqs = await FriendReq.find({ to: myUserId });
         const myUser = await User.findOne({ _id: myUserId }).lean();
         const myFriends = myUser.friends
         const nicks = [];
-        console.log(existedReqs)
 
-
-        currentUsers.forEach((user) => {
+        currentUsers && currentUsers.forEach((user) => {
             const userId = user._id.toString()
-            console.log(userId)
+            // console.log('user', userId)
             if (userId === myUserId.toString()) {
                 console.log("it's me")
             } else if (myFriends.includes(userId)) {
                 console.log('my friend')
 
-            } else if (existedReqs.find((req) =>  req.in.toString() === userId )) {
+            } else if (existedOutgoingReqs.find((req) => req.to.toString() === userId)) {
                 console.log('exists')
                 nicks.push({
                     _id: user._id,
                     nickName: user.nickName,
-                    status: 'req is exists'
+                    status: 'outgoing req is exists'
+                })
+            } else if (existedIncomingReqs.find((req) => req.out.toString() === userId)) {
+                nicks.push({
+                    _id: user._id,
+                    nickName: user.nickName,
+                    status: 'incoming req is exists'
                 })
             } else {
                 nicks.push({
@@ -96,30 +101,23 @@ router.get('/nicks/add-friend/:part', async (req, res) => {
     }
 })
 
-router.post('/new-task', async (req, res) => {
-    const { body: { title, description, workers, groupId, completed } } = req;
+router.get('/nicks/friends', async (req, res) => {
     try {
-        // const isUserExist = await User.findOne({ login });
-        // if (isUserExist) throw new Error("User is already exist.");
+       
+        const { user: { _id: myUserId } } = req;
+        console.log('me', myUserId)
+        console.log(myUserId)
+        const myFriends = await User.find({ friends: myUserId }).lean();
+        console.log(myFriends)
+        const response = myFriends.map((user) => ({
+            _id: user._id,
+            nickName: user.nickName,
+        }));
 
-        const newTask = new Task({
-            title, description, workers, groupId, completed
-        });
-        console.log(newTask);
-        await newTask.save();
-        // if (groupId) {
-        //     const currentGroup = await Group.findOne({ _id: groupId });
-        //     let { tasks: tasksListInGroup } = currentGroup;
-        //     tasksListInGroup.push(newTask._id);
-        //     await Group.updateOne({ _id: groupId }, { tasks: tasksListInGroup })
-        // }
-
-        res.status(201).send(newTask);
+        res.status(200).send(response);
     } catch (err) {
-
-        console.log(err.message)
         res.status(500).json(err.message)
     }
-});
+})
 
 export default router

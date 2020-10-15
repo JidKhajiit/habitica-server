@@ -7,7 +7,7 @@ const friendReqSchema = new Schema({
         type: String,
         required: true
     },
-    in: {
+    to: {
         type: String,
         required: true
     }
