@@ -26,7 +26,7 @@ const userSchema = new Schema({
         required: false,
     },
     friends: [{
-        type: String
+        type: String,
     }]
 });
 

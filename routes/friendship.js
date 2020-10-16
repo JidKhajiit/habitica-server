@@ -85,10 +85,22 @@ router.patch('/accept', async (req, res) => {
         const { user: { _id: myUserId }, body: { id: currentUserId } } = req;
         const currentIncomingReq = await FriendReq.find({ out: currentUserId, to: myUserId }).lean();
         if (currentIncomingReq) {
-            await User.updateOne({ _id: myUserId }, { $push: { friends: currentUserId } });
-            await User.updateOne({ _id: currentUserId }, { $push: { friends: myUserId } });
+            await User.updateOne({ _id: myUserId }, { $addToSet: { friends: currentUserId } });
+            await User.updateOne({ _id: currentUserId }, { $addToSet: { friends: myUserId } });
             await FriendReq.deleteOne({ out: currentUserId, to: myUserId })
         }
+        res.status(201).send('edited');
+    } catch (err) {
+        res.status(500).json(err.message)
+    }
+})
+
+router.patch('/del-friend', async (req, res) => {
+    try {
+        const { user: { _id: myUserId }, body: { id: currentUserId } } = req;
+        console.log(myUserId, currentUserId)
+        await User.updateOne({ _id: currentUserId }, { $pull: { friends: myUserId } });
+        await User.updateOne({ _id: myUserId }, { $pull: { friends: currentUserId } });
         res.status(201).send('edited');
     } catch (err) {
         res.status(500).json(err.message)

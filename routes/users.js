@@ -105,10 +105,7 @@ router.get('/nicks/friends', async (req, res) => {
     try {
        
         const { user: { _id: myUserId } } = req;
-        console.log('me', myUserId)
-        console.log(myUserId)
         const myFriends = await User.find({ friends: myUserId }).lean();
-        console.log(myFriends)
         const response = myFriends.map((user) => ({
             _id: user._id,
             nickName: user.nickName,

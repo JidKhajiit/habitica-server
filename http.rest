@@ -17,13 +17,13 @@ POST http://localhost:3001/auth/signin
 Content-Type: application/json
 
 {
-    "login": "user8",
+    "login": "podpivasnik228",
     "password": "sliva"
 }
 
 ###
 
-POST http://localhost:3001/friend-req
+POST http://localhost:3001/friendship
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjc3MTU0MzM1MzU3YzU0M2MwMzBlZTUiLCJuaWNrTmFtZSI6InVzZXI4IiwiaWF0IjoxNjAyNzcwOTMyLCJleHAiOjE2MDUzNjI5MzJ9.2CVkqEGWE0szOdgdBtOx7DslCrNdeofloSRq19CyjIQ
 
@@ -72,8 +72,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpd
 
 ###
 
-GET http://localhost:3001/groups/5f77097de66e674a957a16d1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTYwNjUwLCJleHAiOjE2MDQxNTI2NTB9.jp0o2BlWNKn-s9gGyBuos883oxy77zAQSzkH42urP_Y
+GET http://localhost:3001/groups/5f77164035357c543c030ee6/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjc1ZDI3ODI3MmY5YzUzMDFmMzk0YWIiLCJuaWNrTmFtZSI6InBvZHBpdmFzbmlrMjI4IiwiaWF0IjoxNjAyODYzOTQ5LCJleHAiOjE2MDU0NTU5NDl9.YzaS8RxNWYLAuKD7E39v6Xjy_J-2ynTIQxYtuKSjTCQ
 
 
 ###
@@ -88,15 +88,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpd
 
 ###
 
-PATCH http://localhost:3001/tasks/5f7adc68e92042141c08ab9a
+PATCH http://localhost:3001/friendship/accept
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InBvZHBpdmFzbmlrMjI4Iiwibmlja05hbWUiOiJwb2RwaXZhc25pazIyOCIsImZpcnN0TmFtZSI6IkFydGVtIiwibGFzdE5hbWUiOiJNaXJvbm92IiwiaWF0IjoxNjAxNTU2MDAzLCJleHAiOjE2MDQxNDgwMDN9.LHTEfBk3A2WdlistOgBZu8WPXsiV-AMSRMUEmVOhvmw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjc3MTUzZTM1MzU3YzU0M2MwMzBlZTQiLCJuaWNrTmFtZSI6InVzZXI3IiwiaWF0IjoxNjAyODU0OTgzLCJleHAiOjE2MDU0NDY5ODN9.2Dz0BH7UxPTiFuvfhVlam3-f9yqlTkhoEEiGB0XZjyU
 
 {
-    "description": "Today!!"
+    "id": "5f75d278272f9c5301f394ab"
 }
 
 ###
 
-GET http://localhost:3001/friend-req/outgoing
+GET http://localhost:3001/friendship/outgoing
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjc1ZDI3ODI3MmY5YzUzMDFmMzk0YWIiLCJuaWNrTmFtZSI6InBvZHBpdmFzbmlrMjI4IiwiaWF0IjoxNjAyNjc4MTUwLCJleHAiOjE2MDUyNzAxNTB9.n47LU9rO1sTh-XLW__kvxxaIKxyuu6l8UUB7xJfHIuc

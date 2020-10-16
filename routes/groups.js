@@ -17,6 +17,18 @@ Array.prototype.hasAllBesides = function (a) {
 
     // return hash.length ? hash : true
 };
+
+function unique(arr) {
+    let result = [];
+
+    for (let str of arr) {
+        if (!result.includes(str)) {
+            result.push(str);
+        }
+    }
+
+    return result;
+}
 // router.get('/:id', async (req, res) => {
 //     try {
 //         const { params: { id } } = req;
@@ -138,7 +150,7 @@ router.patch('/:id', async (req, res) => {
         }
         const bodyVerification = { ...bodyParams, ...body };
 
-        if (Object.keys(bodyParams).length >= Object.keys(bodyVerification).length) {
+        if (Object.keys(bodyParams).length >= Object.keys(bodyVerification).length) { //ввести pull
             const currentGroup = await Group.findById(groupId);
             const expelledUsers = body.users.hasAllBesides(currentGroup.users);
             if (expelledUsers.length) {
@@ -160,6 +172,27 @@ router.patch('/:id', async (req, res) => {
         res.status(200).send('edited');
     } catch (err) {
         console.log(err.message)
+        res.status(500).json(err.message)
+    }
+})
+
+router.get('/:id/editing/users', async (req, res) => {
+    try {
+        const { params: { id }, user: { _id: myUserId } } = req;
+        const currentGroup = await Group.findOne({ _id: id }).lean();
+        const myUser = await User.findOne({ _id: myUserId }).lean();
+        const myFriends = myUser.friends;
+
+        const currentUsersId = unique([...currentGroup.users, ...myFriends]);
+
+        const currentUsers = await User.find({ _id: { $in: currentUsersId } }).lean();
+        const response = currentUsers.map((user) => ({
+            _id: user._id,
+            nickName: user.nickName
+        }))
+
+        res.status(200).send(response);
+    } catch (err) {
         res.status(500).json(err.message)
     }
 })
