@@ -12,10 +12,7 @@ router.post('/', async (req, res) => {
 
         const isReverseExists = await FriendReq.find({ out: currentUserId, to: myUserId })
         if (isReverseExists) { } //сразу связать
-        const newFriendReq = new FriendReq({
-            out: myUserId, to: currentUserId
-        });
-        // console.log(newFriendReq);
+        const newFriendReq = new FriendReq({ out: myUserId, to: currentUserId });
         await newFriendReq.save();
 
 
@@ -101,6 +98,22 @@ router.patch('/del-friend', async (req, res) => {
         console.log(myUserId, currentUserId)
         await User.updateOne({ _id: currentUserId }, { $pull: { friends: myUserId } });
         await User.updateOne({ _id: myUserId }, { $pull: { friends: currentUserId } });
+
+
+        // const isExists = await FriendReq.findOne({ out: currentUserId, to: myUserId })
+        // if (isExists) throw new Error("This request is already exists.");
+
+
+        const newBidForFriendship = new FriendReq({
+            out: currentUserId, to: myUserId
+        });
+        // console.log(newFriendReq);
+        await newBidForFriendship.save();
+
+
+
+
+
         res.status(201).send('edited');
     } catch (err) {
         res.status(500).json(err.message)

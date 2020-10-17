@@ -7,24 +7,6 @@ import config from '../config/constants.js'
 const { secretOrKey } =  config;
 const router = Router()
 
-
-// router.get('/:id', async (req, res) => {
-//     try {
-//         const { params: { id } } = req;
-
-//         const currentUser = await User.findOne({_id: id});
-//         const { firstName, lastName } = currentUser;
-//         const response = {
-//             firstName,
-//             lastName
-//         }
-//         res.status(200).send(response);
-//     } catch (err) {
-//         console.log(err.message)
-//         res.status(500).json(err.message)
-//     }
-// })
-
 router.get('/verify', passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
         const { headers: { authorization } } = req;
@@ -74,7 +56,7 @@ router.post('/signin', async (req, res) => {
         } else if (isUserExist.password !== password) {
             throw new Error("Wrong password. Ur mom will die!!!")
         } else {
-            const { _id, nickName, firstName, lastName } = isUserExist
+            const { _id, nickName } = isUserExist
             const token = `Bearer ${jwt.sign({
                 _id,
                 nickName

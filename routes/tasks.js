@@ -14,7 +14,6 @@ router.patch('/check/:id', async (req, res) => {
         const { params: { id: taskId }, body: { completed } } = req;
         await Task.updateOne({ _id: taskId }, { completed });
 
-
         res.status(200).send('edited');
     } catch (err) {
         console.log(err.message)
@@ -25,7 +24,6 @@ router.patch('/check/:id', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     try {
         const { params: { id: taskId }, body } = req;
-
         const bodyParams = {
             title: '',
             description: '',
@@ -59,19 +57,11 @@ router.get('/user/:id', async (req, res) => {
 router.post('/new-task', async (req, res) => {
     const { body: { title, description, workers, groupId } } = req;
     try {
-        // const isUserExist = await User.findOne({ login });
-        // if (isUserExist) throw new Error("User is already exist.");
 
         const newTask = new Task({
             title, description, workers, groupId, completed: false
         });
         await newTask.save();
-        // if (groupId) {
-        //     const currentGroup = await Group.findOne({ _id: groupId });
-        //     let { tasks: tasksListInGroup } = currentGroup;
-        //     tasksListInGroup.push(newTask._id);
-        //     await Group.updateOne({ _id: groupId }, { tasks: tasksListInGroup })
-        // }
 
         res.status(201).send(newTask);
     } catch (err) {

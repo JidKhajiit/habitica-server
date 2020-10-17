@@ -1,6 +1,4 @@
 import Router from 'express'
-import jwt from 'jsonwebtoken';
-import passport from 'passport';
 import User from '../schemes/user.js'
 import Task from '../schemes/task.js'
 import Group from '../schemes/group.js'
@@ -14,8 +12,6 @@ Array.prototype.hasAllBesides = function (a) {
             return true
         } else false
     });
-
-    // return hash.length ? hash : true
 };
 
 function unique(arr) {
@@ -29,37 +25,36 @@ function unique(arr) {
 
     return result;
 }
-// router.get('/:id', async (req, res) => {
-//     try {
-//         const { params: { id } } = req;
 
-//         const currentGroup = await Group.findOne({ _id: id });
-//         const { firstName, lastName } = currentUser;
-//         const response = {
-//             firstName,
-//             lastName
-//         }
-//         res.status(200).send(response);
-//     } catch (err) {
-//         console.log(err.message)
-//         res.status(500).json(err.message)
-//     }
-// })
+
 
 router.get('/', async (req, res) => {
     try {
         const { user: { _id } } = req;
-        const userGroups = await Group.find({ users: _id }).lean();
-        const userGroupsWithCounter = [];
-        for (const group of userGroups) {
+        const myGroups = await Group.find({ users: _id }).lean();
+        const myGroupsWithCounter = [];
+
+        
+        // const TasksOfAllMyGroups = await Task.find({ groupId: { $in: myGroupsId } }).lean()
+        // const myGroupsWithCounter = myGroups.map((group) => {
+        //     const currentTasks = TasksOfAllMyGroups.find({ groupId: group._id });
+        //     group.tasks = {
+        //         all: currentTasks.length,
+        //         active: currentTasks.filter((task) => task.completed === false).length
+        //     }
+        //     return group
+        // })
+
+        
+        for (const group of myGroups) {
             const currentTasks = await Task.find({ groupId: group._id }).lean()
             group.tasks = {
                 all: currentTasks.length,
                 active: currentTasks.filter((task) => task.completed === false).length
             }
-            userGroupsWithCounter.push(group)
+            myGroupsWithCounter.push(group)
         }
-        res.status(200).send(userGroupsWithCounter);
+        res.status(200).send(myGroupsWithCounter);
     } catch (err) {
         console.log(err.message)
         res.status(500).json(err.message)
