@@ -32,28 +32,18 @@ router.get('/', async (req, res) => {
     try {
         const { user: { _id } } = req;
         const myGroups = await Group.find({ users: _id }).lean();
-        const myGroupsWithCounter = [];
+        const myGroupsIds = myGroups.map((group) => group._id);
 
-        
-        // const TasksOfAllMyGroups = await Task.find({ groupId: { $in: myGroupsId } }).lean()
-        // const myGroupsWithCounter = myGroups.map((group) => {
-        //     const currentTasks = TasksOfAllMyGroups.find({ groupId: group._id });
-        //     group.tasks = {
-        //         all: currentTasks.length,
-        //         active: currentTasks.filter((task) => task.completed === false).length
-        //     }
-        //     return group
-        // })
-
-        
-        for (const group of myGroups) {
-            const currentTasks = await Task.find({ groupId: group._id }).lean()
+        const TasksOfAllMyGroups = await Task.find({ groupId: { $in: myGroupsIds } }).lean()
+        const myGroupsWithCounter = myGroups.map((group) => {
+            const currentTasks = TasksOfAllMyGroups.filter((task) => task.groupId === group._id.toString());
             group.tasks = {
                 all: currentTasks.length,
                 active: currentTasks.filter((task) => task.completed === false).length
             }
-            myGroupsWithCounter.push(group)
-        }
+            return group
+        })
+
         res.status(200).send(myGroupsWithCounter);
     } catch (err) {
         console.log(err.message)
@@ -66,16 +56,10 @@ router.get('/:id', async (req, res) => {
         const { params: { id } } = req;
         const currentGroup = await Group.findOne({ _id: id }).lean();
         currentGroup.tasks = await Task.find({ groupId: id });
-        let currentUsers = [];
-
-        for (const userId of currentGroup.users) {
-            const user = await User.findOne({ _id: userId });
-            currentUsers.push({
-                _id: user._id,
-                nickName: user.nickName
-            });
-        }
+        const currentUsers = await User.find({ _id: { $in: currentGroup.users } }).lean();
+        currentUsers.map((user) => ({ _id: user._id, nickName: user.nickName }))
         currentGroup.users = currentUsers;
+
         res.status(200).send(currentGroup);
     } catch (err) {
         res.status(500).json(err.message)
@@ -102,7 +86,7 @@ router.delete('/:id', async (req, res) => {
 })
 
 router.post('/new-group', async (req, res) => {
-    const { body: { title, description, users, tags } } = req;
+    const { body: { title, description, users, tags }, user: { _id } } = req;
     try {
         const newGroup = new Group({
             title,
@@ -112,20 +96,19 @@ router.post('/new-group', async (req, res) => {
         });
         await newGroup.save();
 
-        const { user: { _id } } = req;
-        const userGroups = await Group.find({ users: _id }).lean();
-        const userGroupsWithCounter = [];
-        for (const group of userGroups) {
-            const currentTasks = await Task.find({ groupId: group._id }).lean()
+        const myGroups = await Group.find({ users: _id }).lean();
+        const myGroupsIds = myGroups.map((group) => group._id);
+        const TasksOfAllMyGroups = await Task.find({ groupId: { $in: myGroupsIds } }).lean()
+        const myGroupsWithCounter = myGroups.map((group) => {
+            const currentTasks = TasksOfAllMyGroups.filter((task) => task.groupId === group._id.toString());
             group.tasks = {
                 all: currentTasks.length,
                 active: currentTasks.filter((task) => task.completed === false).length
             }
-            userGroupsWithCounter.push(group)
-        }
+            return group
+        });
 
-
-        res.status(201).send(userGroupsWithCounter);
+        res.status(201).send(myGroupsWithCounter);
     } catch (err) {
 
         console.log(err.message)
@@ -149,15 +132,8 @@ router.patch('/:id', async (req, res) => {
             const currentGroup = await Group.findById(groupId);
             const expelledUsers = body.users.hasAllBesides(currentGroup.users);
             if (expelledUsers.length) {
-                console.log("не входит")
-                const currentGroupTasks = await Task.find({ groupId: groupId });
-                currentGroupTasks.forEach(async (task) => {
-                    const leftoverUsers = task.workers.filter((user) => !expelledUsers.includes(user._id))
-                    if (leftoverUsers.length !== task.workers.length) {
-                        console.log("в таске удалённые", leftoverUsers)
-                        await Task.updateOne({ _id: task._id }, { workers: leftoverUsers })
-                    }
-                })
+
+                await Task.updateMany({ groupId: groupId }, { $pull: { workers: { _id: { $in: expelledUsers } } } })
             }
             await Group.updateOne({ _id: groupId }, { ...body });
         } else {

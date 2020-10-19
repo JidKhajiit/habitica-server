@@ -62,12 +62,7 @@ router.get('/nicks/add-friend/:part', async (req, res) => {
 
         currentUsers && currentUsers.forEach(({ _id, nickName }) => {
             const userId = _id.toString()
-            if (userId === myUserId.toString()) {
-                console.log("it's me")
-            } else if (myFriends.includes(userId)) {
-                console.log('my friend')
-
-            } else {
+            if (userId !== myUserId.toString() && !myFriends.includes(userId)) {
                 const userInfo = { _id, nickName }
                 userInfo.status = existedOutgoingReqs.find((req) => req.to.toString() === userId) ? 'outgoing req is exists' :
                     existedIncomingReqs.find((req) => req.out.toString() === userId) ? 'incoming req is exists' :

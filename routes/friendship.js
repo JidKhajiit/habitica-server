@@ -8,15 +8,15 @@ router.post('/', async (req, res) => {
     try {
         const { user: { _id: myUserId }, body: { id: currentUserId } } = req;
         const isExists = await FriendReq.findOne({ out: myUserId, to: currentUserId })
-        if (isExists) throw new Error("This request is already exists.");
+        if (isExists) throw new Error("This bid for friendship is already exists.");
 
         const isReverseExists = await FriendReq.find({ out: currentUserId, to: myUserId })
-        if (isReverseExists) { } //сразу связать
-        const newFriendReq = new FriendReq({ out: myUserId, to: currentUserId });
-        await newFriendReq.save();
+        if (isReverseExists) { } //сразу связать (такой ситуации не должно произойти)
+        const newBidForFriendship = new FriendReq({ out: myUserId, to: currentUserId });
+        await newBidForFriendship.save();
 
 
-        res.status(201).send(newFriendReq);
+        res.status(201).send(newBidForFriendship);
     } catch (err) {
         res.status(500).json(err.message)
     }
@@ -25,13 +25,11 @@ router.post('/', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
     try {
         const { user: { _id: myUserId }, params: { id: currentUserId } } = req;
-        console.log(myUserId, currentUserId)
-        let currentFriendReq;
-        currentFriendReq = await FriendReq.findOne({ out: myUserId, to: currentUserId })
-        if (!currentFriendReq) currentFriendReq = await FriendReq.findOne({ out: currentUserId, to: myUserId })
-        if (!currentFriendReq) throw new Error("This request isn't exists.");
+        let currentBidForFriendship;
+        currentBidForFriendship = await FriendReq.findOne({ out: { $in: [myUserId, currentUserId] }, to: { $in: [myUserId, currentUserId] } })
+        if (!currentBidForFriendship) throw new Error("This request isn't exists.");
 
-        await FriendReq.deleteOne(currentFriendReq)
+        await FriendReq.deleteOne(currentBidForFriendship)
 
         res.status(204).send('deleted');
     } catch (err) {
@@ -42,16 +40,11 @@ router.delete('/delete/:id', async (req, res) => {
 router.get('/outgoing', async (req, res) => {
     try {
         const { user: { _id: myUserId } } = req;
-        const myOutReqs = await FriendReq.find({ out: myUserId }).lean();
-        const response = []
-        for await (const req of myOutReqs) {
-            const currentUser = await User.findById(req.to);
-            // console.log(req.to, currentUser)
-            response.push({
-                _id: currentUser._id,
-                nickName: currentUser.nickName
-            })
-        }
+        const myOutgoingBids = await FriendReq.find({ out: myUserId }).lean();
+        const currentUsersIds = myOutgoingBids.map((bid) => bid.to);
+        const currentUsers = await User.find({ _id: { $in: currentUsersIds } })
+        const response = currentUsers.map(({_id, nickName}) => ({ _id, nickName }));
+
         res.status(201).send(response);
     } catch (err) {
         res.status(500).json(err.message)
@@ -61,16 +54,11 @@ router.get('/outgoing', async (req, res) => {
 router.get('/incoming', async (req, res) => {
     try {
         const { user: { _id: myUserId } } = req;
-        const myIncomingReqs = await FriendReq.find({ to: myUserId }).lean();
-        const response = []
-        for await (const req of myIncomingReqs) {
-            const currentUser = await User.findById(req.out);
-            // console.log(req.to, currentUser)
-            response.push({
-                _id: currentUser._id,
-                nickName: currentUser.nickName
-            })
-        }
+        const myIncomingBids = await FriendReq.find({ to: myUserId }).lean();
+        const currentUsersIds = myIncomingBids.map((bid) => bid.out);
+        const currentUsers = await User.find({ _id: { $in: currentUsersIds } })
+        const response = currentUsers.map(({_id, nickName}) => ({ _id, nickName }));
+        
         res.status(201).send(response);
     } catch (err) {
         res.status(500).json(err.message)
@@ -80,8 +68,8 @@ router.get('/incoming', async (req, res) => {
 router.patch('/accept', async (req, res) => {
     try {
         const { user: { _id: myUserId }, body: { id: currentUserId } } = req;
-        const currentIncomingReq = await FriendReq.find({ out: currentUserId, to: myUserId }).lean();
-        if (currentIncomingReq) {
+        const currentIncomingBid = await FriendReq.find({ out: currentUserId, to: myUserId }).lean();
+        if (currentIncomingBid) {
             await User.updateOne({ _id: myUserId }, { $addToSet: { friends: currentUserId } });
             await User.updateOne({ _id: currentUserId }, { $addToSet: { friends: myUserId } });
             await FriendReq.deleteOne({ out: currentUserId, to: myUserId })
@@ -99,20 +87,10 @@ router.patch('/del-friend', async (req, res) => {
         await User.updateOne({ _id: currentUserId }, { $pull: { friends: myUserId } });
         await User.updateOne({ _id: myUserId }, { $pull: { friends: currentUserId } });
 
-
-        // const isExists = await FriendReq.findOne({ out: currentUserId, to: myUserId })
-        // if (isExists) throw new Error("This request is already exists.");
-
-
         const newBidForFriendship = new FriendReq({
             out: currentUserId, to: myUserId
         });
-        // console.log(newFriendReq);
         await newBidForFriendship.save();
-
-
-
-
 
         res.status(201).send('edited');
     } catch (err) {
