@@ -76,7 +76,7 @@ router.get('/nicks/add-friend/:part', async (req, res) => {
     }
 })
 
-router.get('/nicks/friends', async (req, res) => {
+router.get('/my-friends/nicks', async (req, res) => {
     try {
         const { user: { _id: myUserId } } = req;
         const myFriends = await User.find({ friends: myUserId }).lean();
