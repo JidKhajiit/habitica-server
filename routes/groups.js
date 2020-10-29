@@ -10,7 +10,7 @@ Array.prototype.hasAllBesides = function (a) {
     return a.filter((item) => {
         if (!(this.includes(item))) {
             return true
-        } else false
+        } else return false
     });
 };
 
