@@ -12,8 +12,11 @@ const taskSchema = new Schema({
         required: false,
     },
     workers: [{
-        _id: {
-            type: String,
+        _id: false,
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            unique: true,
             required: true,
         },
         startTime: {

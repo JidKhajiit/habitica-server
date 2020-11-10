@@ -2,6 +2,24 @@ import mongoose from "mongoose";
 
 
 const { Schema } = mongoose;
+
+const groupUserSchema = new Schema ({
+    _id: false,
+    userId: {
+        type: Schema.Types.ObjectId,
+    },
+    role: {
+        type: String,
+    }
+})
+
+groupUserSchema.virtual('user', {
+    ref: 'User',
+    localField: 'userId',
+    foreignField: '_id',
+    justOne: true
+});
+
 const groupSchema = new Schema({
     title: {
         type: String,
@@ -11,18 +29,12 @@ const groupSchema = new Schema({
         type: String,
         required: false,
     },
-    users: [{
-        type: String,
-        required: true,
-    }],
+    users: [groupUserSchema],
     tags: [{
         type: String,
-        required: false
+        required: true,
     }]
-    // tasks: [{
-    //     type: String,
-    //     required: false,
-    // }]
+
 
 });
 

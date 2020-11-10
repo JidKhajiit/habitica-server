@@ -79,10 +79,11 @@ router.get('/nicks/add-friend/:part', async (req, res) => {
 router.get('/my-friends/nicks', async (req, res) => {
     try {
         const { user: { _id: myUserId } } = req;
-        const myFriends = await User.find({ friends: myUserId }).lean();
-        const response = myFriends.map(({ _id, nickName }) => ({ _id, nickName }));
-
-        res.status(200).send(response);
+        // const myFriends = await User.find({ friends: myUserId }).lean();
+        // const response = myFriends.map(({ _id, nickName }) => ({ _id, nickName }));
+        const myUser = await User.findById(myUserId).populate('friends');
+        // console.log(myUser.friends.map(user => ({userId: user._id, nickName: user.nickName})))
+        res.status(200).send(myUser.friends.map(user => ({userId: user._id, nickName: user.nickName})));
     } catch (err) {
         res.status(500).json(err.message)
     }
